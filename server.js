@@ -14,9 +14,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'pug');
 
 // mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
-mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.sg4wk.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+mongoose.connect(process.env.MONGO_URI, 
 {
-  useUnifiedTopology: false
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
 })
 
 var trainerSchema = new mongoose.Schema({
