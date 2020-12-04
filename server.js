@@ -13,7 +13,15 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.set('view engine', 'pug');
 
-mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: false})
+// mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(`mongodb+srv://${process.env.MONGO_URL}`, 
+{
+  useNewUrlParser: true, 
+  useUnifiedTopology: false,
+  user: process.env.MONGO_USER,
+  pass: process.env.MONGO_PASS,
+  dbName: process.env.MONGO_DB
+})
 
 var trainerSchema = new mongoose.Schema({
   name: {
