@@ -17,7 +17,7 @@ app.set('view engine', 'pug');
 mongoose.connect(`mongodb+srv://${process.env.MONGO_URL}`, 
 {
   useNewUrlParser: true, 
-  useUnifiedTopology: false,
+  useUnifiedTopology: true,
   user: process.env.MONGO_USER,
   pass: process.env.MONGO_PASS,
   dbName: process.env.MONGO_DB
