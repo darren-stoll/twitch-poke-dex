@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { param } = require('express-validator');
+const { param, query } = require('express-validator');
 
 require('dotenv').config();
 
@@ -13,7 +13,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.set('view engine', 'pug');
 
-// mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
 mongoose.connect(process.env.MONGO_URI, 
 {
   useNewUrlParser: true, 
@@ -44,7 +43,40 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 })
 
-app.get("/trainer/:trainerName/", [param('trainerName').trim().not().isEmpty().escape()], (req, res) => {
+Array.prototype.keySort = function (sortParameter) {
+  function compare(a, b) {
+    const keyA = a[sortParameter];
+    const keyB = b[sortParameter];
+  
+    let comparison = 0;
+    if (keyA > keyB) {
+      comparison = 1;
+    } else if (keyB > keyA) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+  this.sort(compare);
+}
+
+Array.prototype.keySortReverse = function (sortParameter) {
+  function compare(a, b) {
+    const keyA = a[sortParameter];
+    const keyB = b[sortParameter];
+  
+    let comparison = 0;
+    if (keyA < keyB) {
+      comparison = 1;
+    } else if (keyB < keyA) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+  this.sort(compare);
+}
+
+
+app.get("/trainer/:trainerName/", [param('trainerName').trim().not().isEmpty().escape(), query('category').escape(), query('r').escape()], (req, res) => {
   trainerName = req.params.trainerName 
   // In case the validator fails to sanitize properly?
   var regex = /[^A-Za-z0-9_]+/gi
@@ -59,7 +91,24 @@ app.get("/trainer/:trainerName/", [param('trainerName').trim().not().isEmpty().e
       res.json("Trainer name does not exist. Catch a Pokemon first as that trainer.");
       throw err;
     }
-    res.render('index', {trainerName: data.name, pokemonList: data.pokemon});
+    if (Object.entries(req.query).length !== 0) {
+      var sortedList = data.pokemon;
+      if (req.query.category === 'number') {
+        if (req.query.r === 'true') {
+          sortedList.keySortReverse('number');
+        } else sortedList.keySort('number');
+      } else if (req.query.category === 'name') {
+        if (req.query.r === 'true') {
+          sortedList.keySortReverse('name');
+        } else sortedList.keySort('name');
+      } else if (req.query.category === 'datecaught') {
+        if (req.query.r === 'true') {
+          sortedList.keySortReverse('datecaught');
+        } else sortedList.keySort('datecaught');
+      }
+      res.render('index', {trainerName: data.name, pokemonList: sortedList});
+    }
+    else res.render('index', {trainerName: data.name, pokemonList: data.pokemon});
     // res.json(data);
   })
 })

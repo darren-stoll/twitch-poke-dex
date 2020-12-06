@@ -6,11 +6,18 @@ html
     h1= trainerName.toUpperCase() + "'s BOX"
     table
       tr
-        th
-        th
-        th
+        th= "NUMBER"
+        th= "NAME"
+        th= "DATE CAUGHT"
       for pokemon in pokemonList
         tr
-          td= pokemon.number
-          td= pokemon.name.toUpperCase()
+          td 
+            if pokemon.number.toString().length == 1 
+              = "00" + pokemon.number.toString()
+            else if pokemon.number.toString().length == 2
+              = "0" + pokemon.number.toString()
+            else
+              = pokemon.number.toString()
+          
+          td= pokemon.name.toUpperCase().replace("-", " ")
           td= pokemon.datecaught
