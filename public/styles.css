@@ -11,6 +11,15 @@ table {
   
 }
 
+th a {
+  color: black;
+  text-decoration: none;
+}
+
+th a:hover {
+  color: #404040;
+}
+
 td {
   border: 1px solid #a0a0a0;
   border-radius: 2px;

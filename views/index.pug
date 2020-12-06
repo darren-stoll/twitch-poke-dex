@@ -7,9 +7,12 @@ html(lang='en')
     h1= trainerName.toUpperCase() + "'s BOX"
     table
       tr
-        th= "NUMBER"
-        th= "NAME"
-        th= "DATE CAUGHT"
+        th
+          a(href=sortLinks[0])= "NUMBER"
+        th
+          a(href=sortLinks[1])= "NAME"
+        th
+          a(href=sortLinks[2])= "DATE CAUGHT"
       for pokemon in pokemonList
         tr
           td 

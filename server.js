@@ -91,24 +91,32 @@ app.get("/trainer/:trainerName/", [param('trainerName').trim().not().isEmpty().e
       res.json("Trainer name does not exist. Catch a Pokemon first as that trainer.");
       throw err;
     }
+    var sortedList = data.pokemon;
+    const SORTLINKSBASE = ["?category=number", "?category=name", "?category=datecaught"]
+    var sortLinks = SORTLINKSBASE;
     if (Object.entries(req.query).length !== 0) {
-      var sortedList = data.pokemon;
+      sortLinks = SORTLINKSBASE;
       if (req.query.category === 'number') {
+        sortLinks[0] = "?category=number&r=true"
         if (req.query.r === 'true') {
+          sortLinks[0] = "?category=number";
           sortedList.keySortReverse('number');
         } else sortedList.keySort('number');
       } else if (req.query.category === 'name') {
+        sortLinks[1] = "?category=name&r=true"
         if (req.query.r === 'true') {
+          sortLinks[1] = "?category=name";
           sortedList.keySortReverse('name');
         } else sortedList.keySort('name');
       } else if (req.query.category === 'datecaught') {
+        sortLinks[2] = "?category=datecaught&r=true"
         if (req.query.r === 'true') {
+          sortLinks[2] = "?category=datecaught";
           sortedList.keySortReverse('datecaught');
         } else sortedList.keySort('datecaught');
       }
-      res.render('index', {trainerName: data.name, pokemonList: sortedList});
     }
-    else res.render('index', {trainerName: data.name, pokemonList: data.pokemon});
+    res.render('index', {trainerName: data.name, pokemonList: sortedList, sortLinks: sortLinks});
     // res.json(data);
   })
 })
