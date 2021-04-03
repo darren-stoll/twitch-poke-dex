@@ -25,3 +25,7 @@ td {
   border-radius: 2px;
   padding: 12px 6px;
 }
+
+img {
+  vertical-align: bottom;
+}

@@ -33,7 +33,8 @@ var trainerSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    datecaught: Date
+    datecaught: Date,
+    balltype: String
   }]
 })
 
@@ -74,7 +75,6 @@ Array.prototype.keySortReverse = function (sortParameter) {
   }
   this.sort(compare);
 }
-
 
 app.get("/trainer/:trainerName/", [param('trainerName').trim().not().isEmpty().escape(), query('category').escape(), query('r').escape()], (req, res) => {
   trainerName = req.params.trainerName 

@@ -23,5 +23,16 @@ html(lang='en')
             else
               = pokemon.number.toString()
           
-          td= pokemon.name.toUpperCase().replace("-", " ")
-          td= pokemon.datecaught
+          td
+            case pokemon.balltype
+              when "great"
+                img(src='/images/Greatball.png')
+              when "ultra"
+                img(src='/images/Ultraball.png')
+              when "master"
+                img(src='/images/Ultraball.png')
+              default
+                img(src='/images/Pokeball.png')
+            = " " + pokemon.name.toUpperCase().replace("-", " ")
+          td
+            = pokemon.datecaught
